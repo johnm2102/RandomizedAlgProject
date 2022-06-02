@@ -1,7 +1,7 @@
 module StreamGenerator
 open System
 
-let createStream (n : int) (l : int) : seq<uint64 * int > =
+let createStream (n : int) (l : int) : seq<uint64 * int> =
     seq {
         // We generate a random uint64 number.
         let rnd = System.Random ()
