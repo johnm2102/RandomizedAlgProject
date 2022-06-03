@@ -26,13 +26,15 @@ let createStream (n : int) (l : int) : seq<uint64 * int> =
             x <- x + a
             yield (x &&& (((1UL <<< l) - 1UL) <<< 30), 1)
     }
+
+//Mul-shift hashing 
 let MulShift_Hashing(x) = 
     let a : bigint = 5735218251591912617194I //random int 
     let l = 46 
     ((a * x)>>>(64-l))
 
-let n : int = 10000000
-let l : int = 16
+let n : int = 1000000
+let l : int = 10
 
 let C_S = createStream n l 
 
@@ -48,3 +50,12 @@ time_count.Stop()
 printf "The Mul-Shift Sum = %A \n" sum_of_shift
 printf "Time taken for Mul-Shift Sum : %A \n" time_count.Elapsed
 
+//Mul-Mod Hash
+let MulModPrime_Hashing(x) = 
+    let a : bigint = 
+    let b : bigint = 
+    let l : int = 
+    let p : bigint = 
+    let eq : bigint = (a * x + b)
+    let mutable eq2 = (eq &&& p) + (eq >>> l)
+    if (eq)
