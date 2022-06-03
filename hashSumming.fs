@@ -31,8 +31,8 @@ let MulShift_Hashing(x) =
     let l = 46 
     ((a * x)>>>(64-l))
 
-let n : int = 1000000
-let l : int = 20
+let n : int = 10000000
+let l : int = 16
 
 let C_S = createStream n l 
 
