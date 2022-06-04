@@ -1,3 +1,4 @@
+module HashSumming
 open System.Diagnostics
 open Microsoft.FSharp.Core.Operators
 
@@ -51,11 +52,11 @@ printf "The Mul-Shift Sum = %A \n" sum_of_shift
 printf "Time taken for Mul-Shift Sum : %A \n" time_count.Elapsed
 
 //Mul-Mod Hash
-let MulModPrime_Hashing(x) = 
-    let a : bigint = 
-    let b : bigint = 
-    let l : int = 
-    let p : bigint = 
-    let eq : bigint = (a * x + b)
-    let mutable eq2 = (eq &&& p) + (eq >>> l)
-    if (eq)
+// let MulModPrime_Hashing(x) = 
+//     let a : bigint = 
+//     let b : bigint = 
+//     let l : int = 
+//     let p : bigint = 
+//     let eq : bigint = (a * x + b)
+//     let mutable eq2 = (eq &&& p) + (eq >>> l)
+//     if (eq)

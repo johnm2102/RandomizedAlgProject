@@ -1,4 +1,4 @@
 all:
-	fsharpc --checked- hashFunctions.fs streamGenerator.fs Program.fs
+	fsharpc --checked- hashFunctions.fs streamGenerator.fs hashSumming.fs Program.fs
 clean:
 	rm *.exe *.dll
