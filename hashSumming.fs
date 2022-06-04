@@ -1,3 +1,4 @@
+//file can be deleted...has been moved to program.fs
 module HashSumming
 open System.Diagnostics
 open Microsoft.FSharp.Core.Operators
@@ -52,11 +53,15 @@ printf "The Mul-Shift Sum = %A \n" sum_of_shift
 printf "Time taken for Mul-Shift Sum : %A \n" time_count.Elapsed
 
 //Mul-Mod Hash
-// let MulModPrime_Hashing(x) = 
-//     let a : bigint = 
-//     let b : bigint = 
-//     let l : int = 
-//     let p : bigint = 
-//     let eq : bigint = (a * x + b)
-//     let mutable eq2 = (eq &&& p) + (eq >>> l)
-//     if (eq)
+//let MulModPrime_Hashing(x) = 
+//     let a : bigint = 276355893122181903801078345I
+//     let b : bigint = 257956312495689678942101343I
+//     let l : int = 89
+     let p : bigint = pown 2I l
+     let eq : bigint = (a * x + b)
+     let mutable eq2 = (eq &&& p) + (eq >>> l)
+     if (eq2 > p) then eq2 <- eq2 - p  else eq2 <- eq2 
+     eq2 % p 
+
+printf "The Mul-Mod Sum = %A \n" sum_of_shift
+printf "Time taken for Mul-Mod Sum : %A \n" time_count.Elapsed

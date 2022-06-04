@@ -1,11 +1,12 @@
 module HashFunctions
 open System.Numerics
-
+//1a. Implementing mul-shift 
 // no bigints as stated in asg-text
 type MulShift_Hashing(a:uint64,l:int32) =
     member this.l:int32 = l
     member this.hashed (x:uint64) = ((a*x) >>> (64-l) |> int32)
 
+//1b. Implementing mul-mod-prime-hashing 
 // l is less than 64 so int32 should be more than efficient
 // I is literal for bigint
 // 1<<<89 is same as 2^89, since 1>>1 = 2 and is the same as 2^1 = 2
