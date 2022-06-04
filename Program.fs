@@ -62,12 +62,13 @@ time_count3.Start()
 let MulModPrime_Hashing(x) = 
      let a : bigint = 276355893122181903801078345I
      let b : bigint = 257956312495689678942101343I
-     let l : int = 89
-     let p : bigint = pown 2I l
+     let l : int = 58
+     let q : int = 89
+     let p : bigint = pown 2I q
      let eq : bigint = (a * x + b)
-     let mutable eq2 = (eq &&& p) + (eq >>> l)
+     let mutable eq2 = (eq &&& p) + (eq >>> q)
      if (eq2 > p) then eq2 <- eq2 - p  else eq2 <- eq2 
-     eq2 % p
+     eq2 % pown 2I l 
 time_count3.Stop()
 printf "Mul-Mod Prime Time: %A \n" time_count3.Elapsed
 
