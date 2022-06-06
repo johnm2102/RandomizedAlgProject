@@ -1,31 +1,49 @@
 module HashTableChain
+open HashFunctions
+open System
+open System.Numerics
+open System.Collections.Generic
+
+
+type H_pairs(ky:uint64, valu:int64) = 
+    struct
+        member this.key = ky
+        member this.value = valu
+        override text.ToString() = sprintf "The current H_pair: (%A, %A)" ky valu
+    end
+
 
 //creating a hash table 
-type Hash_Tab = Table of (uint64 * int) list array * (uint64 -> uint64)
-let init size ht =
-    let table = [|for i in 1 .. int(2. ** float size) -> [] |]
-    Table(table,ht)
+type HashTable(h_f : Generic_H_F) =
+    let h_f_type = h_f
+    let l = h_f_type.l
+    let mutable lists = [| for _ in 1L .. (1L <<< l) -> new List<H_pairs>()|]
 
+    member public this.Blocks
+        with get() = lists
 
-//2a. get(x)
-let getfunc x (Table (table, ht)) = 
-    let rec find x lst = 
-        match lst with 
-        | [] -> 0 //if x is not in the table then return 0
-        | (key, someval) :: xv when x = key -> someval 
-        | _ :: xs -> find x xs
-    find x table.[int (ht x)] //gets x from table 
-
-//2b. set(x)
-let setfunc x v ((Table(table, ht)) as t) = 
-    //this function will traverse a list and update a tuple(if it exists)
-    let rec update x v lst = 
-        match lst with 
-        | [] -> [x, v] //adds new tuple to end of the list
-        | (key, _) :: table when key = x -> (key, v) :: table 
-        | hash :: table -> hash :: update x v table 
+    member this.get(x:uint64) : Option<int64> =
+        let hashed_val = x |> h_f_type.hashed
+        let list = lists.[int32 hashed_val]
+        let looker = Seq.tryFind(fun (hp: H_pairs) -> hp.key = x) (list)
+        match looker with
+        | Some pair -> Some pair.value //value if x is in the table
+        | None -> None //none if x is not in the table
     
-    ht x //finding right index list
-    |> fun index -> table.[int index] <- update x v table.[int index] //this updates the list
-    t //this returns the table
+    member this.set(x:uint64, v:int64) =
+        let hashed_val = x |> h_f_type.hashed
+        let list = lists.[int32 hashed_val]
+        let looker = Seq.tryFindIndex(fun (hp: H_pairs) -> hp.key = x) (list)
 
+        match looker with
+        | Some pair -> list.[pair] <- H_pairs(x,v) //if x is in the table we change the value to v
+        | None -> list.Add(H_pairs(x,v)) //if x is not in the table we add it with value v
+
+    member this.increment(x:uint64, d:int64) =
+        let hashed_val = x |> h_f_type.hashed
+        let list = lists.[int32 hashed_val]
+        let looker = Seq.tryFindIndex(fun (hp: H_pairs) -> hp.key = x) (list)
+
+        match looker with
+        | Some pair -> list.[pair] <- (H_pairs(x, list.[pair].value + d)) //if x is in the table, we add d to the value
+        | None -> list.Add(H_pairs(x,d)) //if x is not in the table we add is with value d
