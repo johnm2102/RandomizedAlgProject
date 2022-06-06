@@ -1,6 +1,7 @@
 open HashFunctions
 open StreamGenerator
 open System.Diagnostics
+open HashTableChain
 open Microsoft.FSharp.Core.Operators
 
 // Elements in stream
@@ -12,7 +13,7 @@ let C_S = createStream n l
 // from www.random.org/bytes, generating 8 random bytes, setting last bytes bit to 1.
 let random_a_uneven : uint64 = 5858726290542183271UL
 // positive int less than 64
-let lessthan64_l : int32 = 41
+let lessthan64_l : int32 = 4
 // a and b i [p] from random.org/bytes 89 bits randomly generated, then transformed to decimal value as written below
 let random_a_p : bigint = 529974483324080114956256870I
 let random_b_p : bigint = 27323842742462869155777889I
@@ -43,31 +44,25 @@ let mulmod_time =
     time_count2.Stop()
     time_count2.Elapsed, mulmod_sum
 printfn "Multiply mod prime hashing + summing time and sum result: %A" mulmod_time
-//MUL-MOD-PRIME RUNTIME
-// let time_count3 = new Stopwatch()
-// time_count3.Start()
-// let MulModPrime_Hashing(x) = 
-//      let a : bigint = 276355893122181903801078345I
-//      let b : bigint = 257956312495689678942101343I
-//      let l : int = 58
-//      let q : int = 89
-//      let p : bigint = pown 2I q
-//      let eq : bigint = (a * x + b)
-//      let mutable eq2 = (eq &&& p) + (eq >>> q)
-//      if (eq2 > p) then eq2 <- eq2 - p  else eq2 <- eq2 
-//      eq2 % pown 2I l 
-// time_count3.Stop()
-// printf "Mul-Mod Prime Time: %A \n" time_count3.Elapsed
 
-// //MUL-MOD-PRIME SUM RUNTIME 
-// let time_count4 = new Stopwatch()
-// let mutable sum_of_modprime = 0I //sum of mul shift 
-// time_count4.Start()
-// for c in C_S do
-//     let c2 = bigint(fst c) //returns first tuple
-//     sum_of_modprime <- sum_of_modprime + MulModPrime_Hashing c2 
-// time_count4.Stop()
-// printf "Mul-Mod Prime Sum = %A \n" sum_of_modprime
-// printf "Mul-Mod Prime Sum Time: %A \n" time_count4.Elapsed
-
-
+printfn "HASHTABLE TESTS"
+let table_test = new HashTable(mulmodprihash)
+printfn "TESTS FOR SET\n"
+table_test.set(7UL, 32L)
+let set_res = table_test.get(7UL)
+printfn "Setting non existing - Expects: Some 32L, Got %A" set_res
+table_test.set(7UL, 15L)
+let set_res_2nd = table_test.get(7UL)
+printfn "Setting already existing - Expects: Some 15L, Got %A" set_res_2nd
+printfn "TESTS FOR GET\n"
+let get_res_fail = table_test.get(12UL)
+let get_res = table_test.get(7UL)
+printfn "Trying to get non existing - Expects: None, Got %A" get_res_fail
+printfn "Trying to get already existing - Expects: Some 15L, Got %A" get_res
+printfn "TESTS FOR INCREMENT\n"
+table_test.increment(7UL, 10L)
+let incr_res = table_test.get(7UL)
+table_test.increment(3UL, 15L)
+let incr_set_res = table_test.get(3UL)
+printfn "Incrementing already existing - Expects: Some 25L, Got %A" incr_res
+printfn "Incrementing/setting non existing - Expects: Some 15L, Got %A" incr_set_res

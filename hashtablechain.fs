@@ -1,10 +1,8 @@
 module HashTableChain
 open HashFunctions
-open System
-open System.Numerics
 open System.Collections.Generic
 
-
+// creating struct for hash pairs
 type H_pairs(ky:uint64, valu:int64) = 
     struct
         member this.key = ky
