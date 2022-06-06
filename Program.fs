@@ -24,6 +24,7 @@ let random_a_p : bigint = 529974483324080114956256870I
 let random_b_p : bigint = 27323842742462869155777889I
 
 let mulshihash = new MulShift_Hashing(random_a_uneven, lessthan64_l)
+let mulmodprihash = new MulModPrime_Hashing(random_a_p, random_b_p, lessthan64_l)
 
 //TESTING MULTIPLY SHIFT RUNTIME 
 let mulshi_time = 
