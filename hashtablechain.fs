@@ -17,7 +17,15 @@ let getfunc x (Table (table, ht)) =
     find x table.[int (ht x)] //gets x from table 
 
 //2b. set(x)
-//let setfunc xv vv (Table(table, ht)) = 
-//    let rec update xv vv lst = 
-//        match lst with 
- //       | [] -> [xv, vv] //adds new tuple
+let setfunc x v ((Table(table, ht)) as t) = 
+    //this function will traverse a list and update a tuple(if it exists)
+    let rec update x v lst = 
+        match lst with 
+        | [] -> [x, v] //adds new tuple to end of the list
+        | (key, _) :: table when key = x -> (key, v) :: table 
+        | hash :: table -> hash :: update x v table 
+    
+    ht x //finding right index list
+    |> fun index -> table.[int index] <- update x v table.[int index] //this updates the list
+    t //this returns the table
+
