@@ -3,16 +3,10 @@ open StreamGenerator
 open System.Diagnostics
 open Microsoft.FSharp.Core.Operators
 
-// let timer to_time = 
-//     let timer = Stopwatch()
-//     timer.Start()
-//     let func_res = to_time()
-//     let time_res = timer.ElapsedMilliseconds
-//     timer.Stop()
-//     func_res, time_res
-
-let n : int = 100000000
-let l : int = 100
+// Elements in stream
+let n : int = 10000000
+// Unique elements in stream
+let l : int = 10000
 let C_S = createStream n l 
 
 // from www.random.org/bytes, generating 8 random bytes, setting last bytes bit to 1.
@@ -23,8 +17,8 @@ let lessthan64_l : int32 = 41
 let random_a_p : bigint = 529974483324080114956256870I
 let random_b_p : bigint = 27323842742462869155777889I
 
-let mulshihash = new MulShift_Hashing(random_a_uneven, lessthan64_l)
-let mulmodprihash = new MulModPrime_Hashing(random_a_p, random_b_p, lessthan64_l)
+let mulshihash = new MulShift_Hashing(random_a_uneven, lessthan64_l) :> Generic_H_F
+let mulmodprihash = new MulModPrime_Hashing(random_a_p, random_b_p, lessthan64_l) :> Generic_H_F
 
 //TESTING MULTIPLY SHIFT RUNTIME 
 let mulshi_time = 
@@ -39,8 +33,16 @@ let mulshi_time =
 printfn "Multiply shift hashing + summing time and sum result: %A" mulshi_time
 
 //TESTING MULTIPLY MOD PRIME RUNTIME
-
-
+let mulmod_time = 
+    let time_count2 = new Stopwatch()
+    let mutable mulmod_sum = 0UL
+    time_count2.Start()
+    for i in C_S do
+        let i_fst = (fst i)
+        mulmod_sum <- mulmod_sum + uint64(mulmodprihash.hashed i_fst)
+    time_count2.Stop()
+    time_count2.Elapsed, mulmod_sum
+printfn "Multiply mod prime hashing + summing time and sum result: %A" mulmod_time
 //MUL-MOD-PRIME RUNTIME
 // let time_count3 = new Stopwatch()
 // time_count3.Start()
