@@ -53,10 +53,10 @@ printf "The Mul-Shift Sum = %A \n" sum_of_shift
 printf "Time taken for Mul-Shift Sum : %A \n" time_count.Elapsed
 
 //Mul-Mod Hash
-//let MulModPrime_Hashing(x) = 
-//     let a : bigint = 276355893122181903801078345I
-//     let b : bigint = 257956312495689678942101343I
-//     let l : int = 89
+let MulModPrime_Hashing(x) = 
+     let a : bigint = 276355893122181903801078345I
+     let b : bigint = 257956312495689678942101343I
+     let l : int = 89
      let p : bigint = pown 2I l
      let eq : bigint = (a * x + b)
      let mutable eq2 = (eq &&& p) + (eq >>> l)
