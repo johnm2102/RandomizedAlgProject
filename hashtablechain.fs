@@ -17,13 +17,15 @@ type HashTable(h_f : Generic_H_F) =
     let l = h_f_type.l
     let mutable lists = [| for _ in 1L .. (1L <<< l) -> new List<H_pairs>()|]
 
-    member public this.Blocks
+    member public this.get_lsts
         with get() = lists
 
     member this.get(x:uint64) : Option<int64> =
         let hashed_val = x |> h_f_type.hashed
         let list = lists.[int32 hashed_val]
-        let looker = Seq.tryFind(fun (hp: H_pairs) -> hp.key = x) (list)
+        let looker = Seq.tryFind(fun (hp: H_pairs) -> 
+            hp.key = x) (list)
+
         match looker with
         | Some pair -> Some pair.value //value if x is in the table
         | None -> None //none if x is not in the table
@@ -31,7 +33,8 @@ type HashTable(h_f : Generic_H_F) =
     member this.set(x:uint64, v:int64) =
         let hashed_val = x |> h_f_type.hashed
         let list = lists.[int32 hashed_val]
-        let looker = Seq.tryFindIndex(fun (hp: H_pairs) -> hp.key = x) (list)
+        let looker = Seq.tryFindIndex(fun (hp: H_pairs) -> 
+            hp.key = x) (list)
 
         match looker with
         | Some pair -> list.[pair] <- H_pairs(x,v) //if x is in the table we change the value to v
@@ -40,7 +43,8 @@ type HashTable(h_f : Generic_H_F) =
     member this.increment(x:uint64, d:int64) =
         let hashed_val = x |> h_f_type.hashed
         let list = lists.[int32 hashed_val]
-        let looker = Seq.tryFindIndex(fun (hp: H_pairs) -> hp.key = x) (list)
+        let looker = Seq.tryFindIndex(fun (hp: H_pairs) -> 
+            hp.key = x) (list)
 
         match looker with
         | Some pair -> list.[pair] <- (H_pairs(x, list.[pair].value + d)) //if x is in the table, we add d to the value

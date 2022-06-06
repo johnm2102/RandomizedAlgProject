@@ -1,7 +1,8 @@
 module StreamGenerator
 open System
+open SquareSumming
 
-let createStream (n : int) (l : int) : seq<uint64 * int> =
+let createStream (n : int) (l : int) : seq<PairData> =
     seq {
         // We generate a random uint64 number.
         let rnd = System.Random ()
@@ -18,11 +19,11 @@ let createStream (n : int) (l : int) : seq<uint64 * int> =
         let mutable x = 0UL
         for i = 1 to (n/3) do
             x <- x + a
-            yield (x &&& (((1UL <<< l) - 1UL) <<< 30), 1)
+            yield PairData(x &&& (((1UL <<< l) - 1UL) <<< 30), 1)
         for i = 1 to ((n + 1)/3) do
             x <- x + a
-            yield (x &&& (((1UL <<< l) - 1UL) <<< 30), -1)
+            yield PairData(x &&& (((1UL <<< l) - 1UL) <<< 30), -1)
         for i = 1 to (n + 2)/3 do
             x <- x + a
-            yield (x &&& (((1UL <<< l) - 1UL) <<< 30), 1)
+            yield PairData(x &&& (((1UL <<< l) - 1UL) <<< 30), 1)
     }
