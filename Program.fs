@@ -4,6 +4,7 @@ open System.Diagnostics
 open HashTableChain
 open Microsoft.FSharp.Core.Operators
 open SquareSumming
+open CountSketch
 
 // Elements in stream
 let n : int = 10000000
@@ -102,3 +103,29 @@ for i in sqsum_ls do
     let prnt_res = resu.run()
     time_count4.Stop()
     printfn " l = %A\nTime: %A\nSquare Sum: %A" i time_count4.Elapsed prnt_res
+
+let rand_a_0 : bigint = 126885869669102854163944138I
+let rand_a_1 : bigint = 392425927229767805008643723I
+let rand_a_2 : bigint = 512737815644710089529680070I
+let rand_a_3 : bigint = 584593371775862903194778891I
+let a_arr = [rand_a_0;rand_a_1;rand_a_2;rand_a_3]
+let l_s = [1;2;4;8]
+let count_stream = createStream n 15
+printfn "COUNT SKETCH"
+for i in l_s do
+    let tmp_hash1 = new MulModPrime_Hashing(random_a_p, random_b_p, i)
+    let sq_summer1 = SquareSummer(tmp_hash1)
+    let stream_tolist1 = List.ofSeq count_stream
+    let resu1 = stream_integration(stream_tolist1, sq_summer1)
+    let prnt_res1 = resu1.run()
+    printfn "Exact square sum with l=%A: %A" i prnt_res1
+for i in l_s do
+    let four_uni = new four_uni_Hashing(i, a_arr)
+    let count_sketch = CountSkether(four_uni)
+    let stream_tolist = List.ofSeq count_stream
+    let resu = stream_integration(stream_tolist, count_sketch)
+    let time_count5 = Stopwatch()
+    time_count5.Start()
+    let prnt_res = resu.run()
+    time_count5.Stop()
+    printfn "Counsketch with l = %A\n Time: %A\nEstimate: %A" i time_count5.Elapsed prnt_res

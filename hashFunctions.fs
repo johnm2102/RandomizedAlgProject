@@ -1,5 +1,7 @@
 module HashFunctions
 open System.Numerics
+open System.Collections.Generic
+open System
 
 type Generic_H_F =
     abstract member hashed:uint64 -> int64
@@ -25,3 +27,18 @@ type MulModPrime_Hashing(a:bigint,b:bigint,l:int32) =
             fun x -> x&&&(1I<<<l)-1I |> // doing mod 2^l
             fun x -> if x < p then x else x-p // subtracting p if x > p
             |> int64 //piping all the above into an int64 type
+
+type four_uni_Hashing (l:int32,[<ParamArray>]a_s : bigint list) =
+    let p:bigint = (1I<<<89) - 1I
+    member this.l = l
+    member this.hashed (x:uint64):int32*int64 =
+        // from Algo 1 in 2nd moment notes
+        let mutable y = a_s.[0]
+        for i in 1..(a_s.Length-1) do
+            y <- y*(bigint x) + a_s.[i]
+            y <- (y&&&p) + (y>>>89)
+        let prim = y &&& (((bigint 1) <<< (l+1)) - 1I)
+        let tmp_val = (prim &&& 1I)
+        let h = prim >>> 1 |> int32
+        let s = 1I - (tmp_val <<< 1) |> int64
+        (h,s)
